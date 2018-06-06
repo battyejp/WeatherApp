@@ -8,6 +8,9 @@ using WeatherApp.Common;
 using Newtonsoft.Json;
 using System.Linq;
 using WeatherApp.Common.Models;
+using System.Collections.Generic;
+using Ninject;
+using WeatherApp.Common.Services.Interfaces;
 
 namespace WeatherApp
 {
@@ -17,8 +20,11 @@ namespace WeatherApp
         private ListView lvLocations;
         private ProgressBar pgLocations;
         private LocationsViewAdapter locationViewAdaptor;
+        private IDataService<Location> locationService;
+        private IDataService<DailyWeather> dailyWeatherService;
+        private IList<Location> locations;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected async override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
@@ -32,6 +38,19 @@ namespace WeatherApp
 
             lvLocations = FindViewById<ListView>(Resource.Id.lvLocations);
             lvLocations.ItemClick += LvLocations_ItemClick;
+
+            locationService = MainApplication.Kernel.Get<IDataService<Location>>();
+            dailyWeatherService = MainApplication.Kernel.Get<IDataService<DailyWeather>>();
+
+            //await locationService.DeleteAll();
+            locations = await locationService.GetAll();
+            SetListViewItems();
+        }
+
+        private void SetListViewItems() //TODO is this the correct way to refresh
+        {
+            locationViewAdaptor = new LocationsViewAdapter(this, locations);
+            lvLocations.Adapter = locationViewAdaptor;
         }
 
         //TODO see if everything below here can be moved
@@ -41,16 +60,18 @@ namespace WeatherApp
             var service = new WeatherService(); //TODO use DI to get this
             var results = await service.GetLocationsAsync(); //TODO get current location and pass in
             pgLocations.Visibility = ViewStates.Gone;
-            //TODO persist this to sql lite db
+
+            locations = results.Select(x => (Location)x).ToList();
+            SetListViewItems();
+
+            await locationService.DeleteAll();
+            await locationService.InsertAllAsync(locations);
 
             if (results == null)
             {
                 Toast.MakeText(this, "Error retrieving locations from search api", ToastLength.Short).Show();
                 return;
             }
-
-            locationViewAdaptor = new LocationsViewAdapter(this, results);
-            lvLocations.Adapter = locationViewAdaptor;
         }
 
         private async void LvLocations_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -69,7 +90,9 @@ namespace WeatherApp
 
             var intent = new Intent(this, typeof(WeatherDetailedActivity));
             var list = weatherForecast.Consolidated_Weather.Select(x => (DailyWeather)x).ToList();
-            intent.PutExtra("WeatherForecast", JsonConvert.SerializeObject(list));
+            list.ForEach(x => x.WoeId = location.Id);
+            await dailyWeatherService.InsertAllAsync(list);
+            intent.PutExtra("LocationId", location.Id);
             StartActivity(intent);
         }
     }

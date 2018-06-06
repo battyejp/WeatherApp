@@ -12,9 +12,9 @@ using Android.Widget;
 
 namespace WeatherApp.Controls
 {
-    public class DailyWeather : LinearLayout
+    public class DailyWeatherCtrl : LinearLayout
     {
-        public DailyWeather(Context context)
+        public DailyWeatherCtrl(Context context)
             : base (context)
         {
             var myTextView = new TextView(this.Context)

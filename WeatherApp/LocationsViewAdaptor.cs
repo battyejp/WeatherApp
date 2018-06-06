@@ -4,15 +4,16 @@ using Android.App;
 using Android.Views;
 using Android.Widget;
 using WeatherApp.Common.Dtos;
+using WeatherApp.Common.Models;
 
 namespace WeatherApp
 {
-    public class LocationsViewAdapter : BaseAdapter<LocationDto>
+    public class LocationsViewAdapter : BaseAdapter<Location>
     {
-        private List<LocationDto> locations;
+        private IList<Location> locations;
         private Activity context;
 
-        public LocationsViewAdapter(Activity context, List<LocationDto> locations)
+        public LocationsViewAdapter(Activity context, IList<Location> locations)
             : base()
         {
             this.context = context;
@@ -22,7 +23,7 @@ namespace WeatherApp
         {
             return position;
         }
-        public override LocationDto this[int position]
+        public override Location this[int position]
         {
             get { return locations[position]; }
         }
