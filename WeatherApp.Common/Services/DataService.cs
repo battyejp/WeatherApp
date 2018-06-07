@@ -8,31 +8,37 @@ namespace WeatherApp.Common.Services
 {
     public class DataService<T> : IDataService<T> where T : BaseModel, new()
     {
-        private SQLiteAsyncConnection database;
+        private SQLiteConnection database;
 
         public DataService(IFileService fileService)
         {
-            database = new SQLiteAsyncConnection(fileService.GetLocalFilePath("ScannerSQLite.db3"));
+            database = new SQLiteConnection(fileService.GetLocalFilePath("ScannerSQLite.db3"));
         }
 
-        public async Task Setup()
+        public void Setup()
         {
-            await database.CreateTableAsync<T>();
+            database.CreateTable<T>();
         }
 
-        public async Task InsertAllAsync(IEnumerable<T> items)
+        public void InsertAll(IEnumerable<T> items)
         {
-            await database.InsertAllAsync(items);
+            database.InsertAll(items);
         }
 
-        public async Task<List<T>> GetAll()
+        public List<T> GetAll()
         {
-            return await database.QueryAsync<T>($"Select * from { typeof(T).Name }");
+            return database.Query<T>($"Select * from { typeof(T).Name }");
         }
 
-        public async Task DeleteAll()
+        public void DeleteAll()
         {
-            await database.ExecuteAsync($"Delete from { typeof(T).Name }");
+            database.Execute($"Delete from { typeof(T).Name }");
+        }
+
+        public void RefreshData(IEnumerable<T> items)
+        {
+            DeleteAll();
+            InsertAll(items);
         }
     }
 }

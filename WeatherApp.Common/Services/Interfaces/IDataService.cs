@@ -6,9 +6,10 @@ namespace WeatherApp.Common.Services.Interfaces
 {
     public interface IDataService<T> where T : BaseModel
     {
-        Task Setup();
-        Task InsertAllAsync(IEnumerable<T> items);
-        Task<List<T>> GetAll();
-        Task DeleteAll();
+        void Setup();
+        void InsertAll(IEnumerable<T> items);
+        List<T> GetAll();
+        void DeleteAll();
+        void RefreshData(IEnumerable<T> items);
     }
 }

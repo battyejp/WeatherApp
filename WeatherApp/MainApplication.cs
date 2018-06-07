@@ -22,12 +22,12 @@ namespace WeatherApp
 
         public static IKernel Kernel { get; private set; }
 
-        public async override void OnCreate()
+        public override void OnCreate()
         {
             base.OnCreate();
 
-            await Kernel.Get<IDataService<Location>>().Setup();
-            await Kernel.Get<IDataService<DailyWeather>>().Setup();
+            Kernel.Get<IDataService<Location>>().Setup();
+            Kernel.Get<IDataService<DailyWeather>>().Setup();
         }
     }
     internal class NinjectModuleImplementation : NinjectModule

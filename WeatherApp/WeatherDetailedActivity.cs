@@ -8,21 +8,25 @@ using WeatherApp.Controls;
 
 namespace WeatherApp
 {
-    [Activity(Label = "Weekly Forecast")]
+    [Activity(Label = "Weekly Forecast")] //TODO set this to location
     public class WeatherDetailedActivity : Activity
     {
-        protected async override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            SetContentView(Resource.Layout.WeatherDetail);
+            SetContentView(Resource.Layout.WeatherDetailScroll);
 
-            var layout = FindViewById<LinearLayout>(Resource.Id.mainLayout); //TODO add in images
-            layout.AddView(new DailyWeatherCtrl(this));
+            var layout = FindViewById<LinearLayout>(Resource.Id.scrollLayout);
 
-            int selectedLocationId = Intent.GetIntExtra("LocationId", 0);
+            int selectedLocationId = Intent.GetIntExtra("LocationId", 0); //TODO use this to filter
             var service = MainApplication.Kernel.Get<IDataService<DailyWeather>>();
-            var forecast = await service.GetAll();
+            var forecast = service.GetAll();
+
+            foreach(var weather in forecast)
+            {
+                layout.AddView(new DailyWeatherCtrl(this, weather));
+            }
 
             //TODO display all weather
         }

@@ -24,7 +24,7 @@ namespace WeatherApp
         private IDataService<DailyWeather> dailyWeatherService;
         private IList<Location> locations;
 
-        protected async override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
@@ -43,7 +43,7 @@ namespace WeatherApp
             dailyWeatherService = MainApplication.Kernel.Get<IDataService<DailyWeather>>();
 
             //await locationService.DeleteAll();
-            locations = await locationService.GetAll();
+            locations = locationService.GetAll();
             SetListViewItems();
         }
 
@@ -64,8 +64,7 @@ namespace WeatherApp
             locations = results.Select(x => (Location)x).ToList();
             SetListViewItems();
 
-            await locationService.DeleteAll();
-            await locationService.InsertAllAsync(locations);
+            locationService.RefreshData(locations);
 
             if (results == null)
             {
@@ -79,7 +78,7 @@ namespace WeatherApp
             pgLocations.Visibility = ViewStates.Visible;
             var location = locationViewAdaptor[e.Position];
             var service = new WeatherService(); //TODO use DI to get this
-            var weatherForecast = await service.GetWeatherForecastAsync(); //TODO get current location and pass in
+            var weatherForecast = await service.GetWeatherForecastAsync(); //TODO get selected location and pass in
             pgLocations.Visibility = ViewStates.Gone;
 
             if (weatherForecast == null)
@@ -91,10 +90,12 @@ namespace WeatherApp
             var intent = new Intent(this, typeof(WeatherDetailedActivity));
             var list = weatherForecast.Consolidated_Weather.Select(x => (DailyWeather)x).ToList();
             list.ForEach(x => x.WoeId = location.Id);
-            await dailyWeatherService.InsertAllAsync(list);
+            dailyWeatherService.RefreshData(list);
             intent.PutExtra("LocationId", location.Id);
             StartActivity(intent);
         }
+
+        //TODO disbale controls on refreshing
     }
 }
 

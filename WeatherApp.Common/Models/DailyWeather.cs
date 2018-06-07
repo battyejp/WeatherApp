@@ -10,14 +10,14 @@ namespace WeatherApp.Common.Models
         public string Weather { get; set; }
         public DateTime Date { get; set; }
         public double MinTemp { get; set; }
-        public double Max_Temp { get; set; }
+        public double MaxTemp { get; set; }
         public int WoeId { get; set; }
 
         public static implicit operator DailyWeather(ConsolidatedWeatherDto dto) => new DailyWeather
         {
             Weather = dto.Weather_State_Name,
             Date = DateTime.Parse(dto.Applicable_Date),
-            Max_Temp = dto.Max_Temp,
+            MaxTemp = dto.Max_Temp,
             MinTemp = dto.Min_Temp,
         };
     }

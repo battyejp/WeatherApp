@@ -56,6 +56,21 @@ namespace WeatherApp
 			// aapt resource value: 0x7f040001
 			public const int pgLocations = 2130968577;
 			
+			// aapt resource value: 0x7f040008
+			public const int scrollLayout = 2130968584;
+			
+			// aapt resource value: 0x7f040004
+			public const int tvDate = 2130968580;
+			
+			// aapt resource value: 0x7f040006
+			public const int tvMax = 2130968582;
+			
+			// aapt resource value: 0x7f040007
+			public const int tvMin = 2130968583;
+			
+			// aapt resource value: 0x7f040005
+			public const int tvWeather = 2130968581;
+			
 			static Id()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -74,6 +89,9 @@ namespace WeatherApp
 			
 			// aapt resource value: 0x7f020001
 			public const int WeatherDetail = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int WeatherDetailScroll = 2130837506;
 			
 			static Layout()
 			{
