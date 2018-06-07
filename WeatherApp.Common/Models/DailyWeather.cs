@@ -8,6 +8,7 @@ namespace WeatherApp.Common.Models
     public class DailyWeather : BaseModel
     {
         public string Weather { get; set; }
+        public string WeatherAbbr { get; set; }
         public DateTime Date { get; set; }
         public double MinTemp { get; set; }
         public double MaxTemp { get; set; }
@@ -19,6 +20,7 @@ namespace WeatherApp.Common.Models
             Date = DateTime.Parse(dto.Applicable_Date),
             MaxTemp = dto.Max_Temp,
             MinTemp = dto.Min_Temp,
+            WeatherAbbr = dto.Weather_State_Abbr
         };
     }
 }

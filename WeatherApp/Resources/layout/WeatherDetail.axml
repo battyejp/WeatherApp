@@ -12,25 +12,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:id="@+id/tvDate" />
+        android:id="@+id/tvDate"
+        android:padding="@dimen/compat_button_inset_vertical_material" />
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivWeather" />
     <TextView
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvWeather" />
+        android:id="@+id/tvWeather"
+        android:padding="@dimen/compat_button_inset_vertical_material" />
     <TextView
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvMax" />
+        android:id="@+id/tvMax"
+        android:padding="@dimen/compat_button_inset_vertical_material" />
     <TextView
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvMin" />
+        android:id="@+id/tvMin"
+        android:padding="@dimen/compat_button_inset_vertical_material" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -423,6 +423,9 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0a0011
 			public const int italic = 2131361809;
 			
+			// aapt resource value: 0x7f0a002b
+			public const int ivWeather = 2131361835;
+			
 			// aapt resource value: 0x7f0a000d
 			public const int light = 2131361805;
 			
@@ -462,8 +465,8 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0a001f
 			public const int right_side = 2131361823;
 			
-			// aapt resource value: 0x7f0a002e
-			public const int scrollLayout = 2131361838;
+			// aapt resource value: 0x7f0a002f
+			public const int scrollLayout = 2131361839;
 			
 			// aapt resource value: 0x7f0a0009
 			public const int standard = 2131361801;
@@ -486,14 +489,14 @@ namespace WeatherApp
 			// aapt resource value: 0x7f0a002a
 			public const int tvDate = 2131361834;
 			
-			// aapt resource value: 0x7f0a002c
-			public const int tvMax = 2131361836;
-			
 			// aapt resource value: 0x7f0a002d
-			public const int tvMin = 2131361837;
+			public const int tvMax = 2131361837;
 			
-			// aapt resource value: 0x7f0a002b
-			public const int tvWeather = 2131361835;
+			// aapt resource value: 0x7f0a002e
+			public const int tvMin = 2131361838;
+			
+			// aapt resource value: 0x7f0a002c
+			public const int tvWeather = 2131361836;
 			
 			// aapt resource value: 0x7f0a000a
 			public const int wide = 2131361802;

@@ -10,7 +10,6 @@ namespace WeatherApp.Common.Services
 {
     public class WeatherService : IWeatherService
     {
-        //TODO unit test this
         public async Task<List<LocationDto>> GetLocationsAsync(double latitude, double longitude)
         {
             List<LocationDto> results;
