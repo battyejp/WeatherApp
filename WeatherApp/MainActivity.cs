@@ -5,14 +5,11 @@ using System;
 using Android.Views;
 using Android.Content;
 using WeatherApp.Common;
-using Newtonsoft.Json;
 using System.Linq;
 using WeatherApp.Common.Models;
 using System.Collections.Generic;
 using Ninject;
 using WeatherApp.Common.Services.Interfaces;
-using Android.Gms.Location;
-using System.Threading.Tasks;
 
 namespace WeatherApp
 {
@@ -46,7 +43,8 @@ namespace WeatherApp
             locationService = MainApplication.Kernel.Get<IDataService<Location>>();
             dailyWeatherService = MainApplication.Kernel.Get<IDataService<DailyWeather>>();
 
-            //await locationService.DeleteAll();
+            //await locationService.DeleteAll(); //This is used for testing
+
             locations = locationService.GetAll();
             SetListViewItems();
 
@@ -60,7 +58,7 @@ namespace WeatherApp
             lvLocations.Adapter = locationViewAdaptor;
         }
 
-        //TODO see if everything below here can be moved
+        //TO DO move everything below here to a viewmodel so it can be unit tested.
         private async void RefreshBtn_Click(object sender, EventArgs e)
         {
             var userlocation = await locationManager.GetLastLocationFromDevice();
@@ -93,7 +91,7 @@ namespace WeatherApp
             pgLocations.Visibility = ViewStates.Visible;
             var location = locationViewAdaptor[e.Position];
             var service = new WeatherService(); //TODO use DI to get this
-            var weatherForecast = await service.GetWeatherForecastAsync(location.WoeId); //TODO get selected location and pass in
+            var weatherForecast = await service.GetWeatherForecastAsync(location.WoeId);
             pgLocations.Visibility = ViewStates.Gone;
 
             if (weatherForecast == null)
@@ -106,11 +104,12 @@ namespace WeatherApp
             var list = weatherForecast.Consolidated_Weather.Select(x => (DailyWeather)x).ToList();
             list.ForEach(x => x.WoeId = location.Id);
             dailyWeatherService.RefreshData(list);
+            intent.PutExtra("Title", location.Title);
             intent.PutExtra("LocationId", location.Id);
             StartActivity(intent);
         }
 
-        //TODO disbale controls on refreshing
+        //TODO disable controls when loading icon appears
     }
 }
 

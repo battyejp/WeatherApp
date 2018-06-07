@@ -17,11 +17,11 @@ namespace WeatherApp.Common
             {
                 results = await "https://www.metaweather.com/api/location/search/"
                     .SetQueryParam("lattlong", $"{latitude},{longitude}")
-                    .GetJsonAsync<List<LocationDto>>(); //TODO move to config
+                    .GetJsonAsync<List<LocationDto>>();
             }
             catch (Exception ex)
             {
-                //TODO log to remote logging service
+                //TO DO log to remote logging service
                 return null;
             }
 
@@ -35,11 +35,11 @@ namespace WeatherApp.Common
             try
             {
                 var url = $"https://www.metaweather.com/api/location/{locationId.ToString()}/";
-                result = await url.GetJsonAsync<WeatherForecastDto>(); //TODO move to config
+                result = await url.GetJsonAsync<WeatherForecastDto>();
             }
             catch (Exception ex)
             {
-                //TODO log to remote logging service
+                //TO DO log to remote logging service
                 return null;
             }
 

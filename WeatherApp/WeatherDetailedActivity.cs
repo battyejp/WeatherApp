@@ -9,7 +9,7 @@ using WeatherApp.Controls;
 
 namespace WeatherApp
 {
-    [Activity(Label = "Weekly Forecast")] //TODO set this to location
+    [Activity]
     public class WeatherDetailedActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -17,6 +17,7 @@ namespace WeatherApp
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.WeatherDetailScroll);
+            Title = Intent.GetStringExtra("Title");
 
             var layout = FindViewById<LinearLayout>(Resource.Id.scrollLayout);
 
@@ -28,8 +29,6 @@ namespace WeatherApp
             {
                 layout.AddView(new DailyWeatherCtrl(this, weather));
             }
-
-            //TODO display all weather
         }
     }
 }
