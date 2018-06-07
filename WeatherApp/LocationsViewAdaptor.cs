@@ -19,18 +19,22 @@ namespace WeatherApp
             this.context = context;
             this.locations = locations;
         }
+
         public override long GetItemId(int position)
         {
             return position;
         }
+
         public override Location this[int position]
         {
             get { return locations[position]; }
         }
+
         public override int Count
         {
             get { return locations.Count; }
         }
+
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             View view = convertView;
@@ -40,6 +44,12 @@ namespace WeatherApp
 
             view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = this[position].Title;
             return view;
+        }
+
+        public void Refresh(IList<Location> locations)
+        {
+            this.locations = locations;
+            this.NotifyDataSetChanged();
         }
     }
 }

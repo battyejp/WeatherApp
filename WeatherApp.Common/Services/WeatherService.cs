@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WeatherApp.Common.Dtos;
+using WeatherApp.Common.Services.Interfaces;
 
-namespace WeatherApp.Common
+namespace WeatherApp.Common.Services
 {
-    public class WeatherService
+    public class WeatherService : IWeatherService
     {
         //TODO unit test this
         public async Task<List<LocationDto>> GetLocationsAsync(double latitude, double longitude)

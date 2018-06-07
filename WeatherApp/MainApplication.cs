@@ -35,6 +35,7 @@ namespace WeatherApp
         public override void Load()
         {
             Bind<IFileService>().To<FileService>();
+            Bind<IWeatherService>().To<WeatherService>();
             Bind<IDataService<Location>>().To<DataService<Location>>().InSingletonScope();
             Bind<IDataService<DailyWeather>>().To<DataService<DailyWeather>>().InSingletonScope();
         }

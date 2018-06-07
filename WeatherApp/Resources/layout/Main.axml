@@ -8,11 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnRefresh" />
-    <ProgressBar xmlns:tools="http://schemas.android.com/tools"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pgLocations" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"

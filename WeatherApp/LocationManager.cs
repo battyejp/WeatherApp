@@ -1,41 +1,38 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Android;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Gms.Common;
 using Android.Gms.Location;
 using Android.Locations;
+using Android.Support.V4.Content;
 
 namespace WeatherApp
 {
     public class LocationManager
     {
-        //TODO sort unhappy path out
         private FusedLocationProviderClient fusedLocationProviderClient;
 
         public LocationManager(Activity activity)
         {
+            if (!HasPermissions(activity) || !HasGooglePlayServicesInstalled(activity))
+                return;
+
             fusedLocationProviderClient = LocationServices.GetFusedLocationProviderClient(activity);
         }
 
-        public bool IsGooglePlayServicesInstalled(Context context)
+        public bool HasGooglePlayServicesInstalled(Context context)
         {
             var queryResult = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(context);
-            if (queryResult == ConnectionResult.Success)
-            {
-                //Log.Info("MainActivity", "Google Play Services is installed on this device.");
-                return true;
-            }
+            return queryResult == ConnectionResult.Success;
+        }
 
-            if (GoogleApiAvailability.Instance.IsUserResolvableError(queryResult))
-            {
-                var errorString = GoogleApiAvailability.Instance.GetErrorString(queryResult);
-                //Log.Error("MainActivity", "There is a problem with Google Play Services on this device: {0} - {1}", queryResult, errorString);
 
-                // Alternately, display the error to the user.
-            }
-
-            return false;
+        public bool HasPermissions(Context context)
+        {
+            return ContextCompat.CheckSelfPermission(context, Manifest.Permission.AccessFineLocation) == Permission.Granted;
         }
 
         public async Task<Location> GetLastLocationFromDevice()
@@ -54,6 +51,9 @@ namespace WeatherApp
 
         public async Task RequestLocationUpdatesAsync(MainActivity mainActivity)
         {
+            if (!HasPermissions(mainActivity) || !HasGooglePlayServicesInstalled(mainActivity))
+                return;
+
             LocationRequest locationRequest = new LocationRequest()
                       .SetPriority(LocationRequest.PriorityHighAccuracy)
                       .SetInterval(60 * 1000 * 5)
