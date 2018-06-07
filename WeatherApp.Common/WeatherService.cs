@@ -1,4 +1,5 @@
 ﻿using Flurl.Http;
+using Flurl;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,12 +10,14 @@ namespace WeatherApp.Common
     public class WeatherService
     {
         //TODO unit test this
-        public async Task<List<LocationDto>> GetLocationsAsync()
+        public async Task<List<LocationDto>> GetLocationsAsync(double latitude, double longitude)
         {
             List<LocationDto> results;
             try
             {
-                results = await "https://www.metaweather.com/api/location/search/?lattlong=36.96,-122.02".GetJsonAsync<List<LocationDto>>(); //TODO move to config and pass in variables
+                results = await "https://www.metaweather.com/api/location/search/"
+                    .SetQueryParam("lattlong", $"{latitude},{longitude}")
+                    .GetJsonAsync<List<LocationDto>>(); //TODO move to config
             }
             catch (Exception ex)
             {
@@ -25,13 +28,14 @@ namespace WeatherApp.Common
             return results;
         }
 
-        public async Task<WeatherForecastDto> GetWeatherForecastAsync()
+        public async Task<WeatherForecastDto> GetWeatherForecastAsync(int locationId)
         {
             WeatherForecastDto result;
 
             try
             {
-                result = await "https://www.metaweather.com/api/location/44418/".GetJsonAsync<WeatherForecastDto>(); //TODO move to config and pass in variables
+                var url = $"https://www.metaweather.com/api/location/{locationId.ToString()}/";
+                result = await url.GetJsonAsync<WeatherForecastDto>(); //TODO move to config
             }
             catch (Exception ex)
             {

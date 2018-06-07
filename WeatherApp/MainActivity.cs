@@ -11,6 +11,8 @@ using WeatherApp.Common.Models;
 using System.Collections.Generic;
 using Ninject;
 using WeatherApp.Common.Services.Interfaces;
+using Android.Gms.Location;
+using System.Threading.Tasks;
 
 namespace WeatherApp
 {
@@ -23,13 +25,15 @@ namespace WeatherApp
         private IDataService<Location> locationService;
         private IDataService<DailyWeather> dailyWeatherService;
         private IList<Location> locations;
+        private LocationManager locationManager;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected async override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.Main);
 
+            this.locationManager = new LocationManager(this);
             var refreshBtn = FindViewById<Button>(Resource.Id.btnRefresh);
             refreshBtn.Click += RefreshBtn_Click;
 
@@ -45,6 +49,9 @@ namespace WeatherApp
             //await locationService.DeleteAll();
             locations = locationService.GetAll();
             SetListViewItems();
+
+            await locationManager.RequestLocationUpdatesAsync(this); //TODO check permissions and google services
+
         }
 
         private void SetListViewItems() //TODO is this the correct way to refresh
@@ -56,9 +63,17 @@ namespace WeatherApp
         //TODO see if everything below here can be moved
         private async void RefreshBtn_Click(object sender, EventArgs e)
         {
+            var userlocation = await locationManager.GetLastLocationFromDevice();
+
+            if (userlocation == null)
+            {
+                Toast.MakeText(this, "Error retrieving your location, make sure location is set in your settings", ToastLength.Long).Show();
+                return;
+            }
+
             pgLocations.Visibility = ViewStates.Visible;
             var service = new WeatherService(); //TODO use DI to get this
-            var results = await service.GetLocationsAsync(); //TODO get current location and pass in
+            var results = await service.GetLocationsAsync(userlocation.Latitude, userlocation.Longitude);
             pgLocations.Visibility = ViewStates.Gone;
 
             locations = results.Select(x => (Location)x).ToList();
@@ -78,7 +93,7 @@ namespace WeatherApp
             pgLocations.Visibility = ViewStates.Visible;
             var location = locationViewAdaptor[e.Position];
             var service = new WeatherService(); //TODO use DI to get this
-            var weatherForecast = await service.GetWeatherForecastAsync(); //TODO get selected location and pass in
+            var weatherForecast = await service.GetWeatherForecastAsync(location.WoeId); //TODO get selected location and pass in
             pgLocations.Visibility = ViewStates.Gone;
 
             if (weatherForecast == null)

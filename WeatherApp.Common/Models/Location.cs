@@ -13,12 +13,15 @@ namespace WeatherApp.Common.Models
 
         public string Long { get; set; }
 
+        public int WoeId { get; set; }
+
         public static implicit operator Location(LocationDto dto) => new Location
         {
             Id = dto.WoeId,
             Title = dto.Title,
             Lat = dto.Latt_Long.Split(',')[0],
-            Long = dto.Latt_Long.Split(',')[1]
+            Long = dto.Latt_Long.Split(',')[1],
+            WoeId = dto.WoeId
         };
     }
 }

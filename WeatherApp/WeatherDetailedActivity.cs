@@ -2,6 +2,7 @@
 using Android.OS;
 using Android.Widget;
 using Ninject;
+using System.Linq;
 using WeatherApp.Common.Models;
 using WeatherApp.Common.Services.Interfaces;
 using WeatherApp.Controls;
@@ -19,9 +20,9 @@ namespace WeatherApp
 
             var layout = FindViewById<LinearLayout>(Resource.Id.scrollLayout);
 
-            int selectedLocationId = Intent.GetIntExtra("LocationId", 0); //TODO use this to filter
+            int selectedLocationId = Intent.GetIntExtra("LocationId", 0);
             var service = MainApplication.Kernel.Get<IDataService<DailyWeather>>();
-            var forecast = service.GetAll();
+            var forecast = service.GetAll().Where(x => x.WoeId == selectedLocationId);
 
             foreach(var weather in forecast)
             {
