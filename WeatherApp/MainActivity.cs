@@ -8,6 +8,7 @@ using WeatherApp.Common.Models;
 using System.Collections.Generic;
 using Ninject;
 using WeatherApp.Common.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace WeatherApp
 {
@@ -84,6 +85,11 @@ namespace WeatherApp
                 return;
             }
 
+            await GetAndPopulateLocations(userlocation);
+        }
+
+        private async Task GetAndPopulateLocations(Android.Locations.Location userlocation)
+        {
             var results = await weatherService.GetLocationsAsync(userlocation.Latitude, userlocation.Longitude);
 
             locations = results.Select(x => (Location)x).ToList();
@@ -94,7 +100,6 @@ namespace WeatherApp
             if (results == null)
             {
                 Toast.MakeText(this, "Error retrieving locations from search api", ToastLength.Short).Show();
-                return;
             }
         }
 
